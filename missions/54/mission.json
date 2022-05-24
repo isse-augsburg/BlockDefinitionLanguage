@@ -1,0 +1,179 @@
+{
+  "mission": {
+    "b0": {
+      "type": "Start",
+      "next": "b1"
+    },
+
+    "b1": {
+      "type": "Fork",
+      "next": ["b2","b3"]
+    },
+
+    "b2": {
+      "type": "LaunchROS1",
+      "package": "waypoint_control",
+      "launchfile": "simulated_waypoint_control.launch ",
+      "commandline_args": ["mav_id:=$mavid"],
+      "next": "b2.5"
+    },
+    
+    
+    "b2.5": {
+      "type": "Wait",
+      "ms": "10000",
+      "next": "b2.6"
+    },
+    
+    "b2.6": {
+      "type": "StartROS1Bridge",
+      "next": "b5"
+    },
+
+    
+    "b3": {
+      "type": "StartNodeROS2",
+      "package":"swarm_sync",
+      "node": "swarm_sync_client",
+      "nodename": "swcl1",
+      "next": "b4"
+    },
+
+    "b4": {
+      "type": "WaitForActiveTopicROS2",
+      "name": "\/mav$mavid\/sensor\/temperature\/",
+      "next": "b6"
+    },
+
+
+
+    "b5":{
+      "type": "Wait",
+      "ms": "5000",
+      "next": "b6"
+    },
+
+    "b6": {
+      "type": "Join",
+      "next": "b7"
+    },
+
+    "b7":{
+      "type": "Barrier",
+      "id": "BarrierInitOK",
+      "next": "b9"
+    },
+    "b8": {
+      "type": "CallServiceROS1",
+      "name": "/aq_$mavid/mavros/cmd/arming",
+      "data": "true",
+      "next": "b9"
+    },
+
+
+    "b9": {
+      "type": "CallServiceROS1",
+      "name": "/aq_$mavid/takeoff",
+      "next": "b10"
+    },
+
+    "b10":{
+      "type": "CallServiceROS1",
+      "name": "/aq_$mavid/fly_to",
+      "data": "0 0 1",
+      "next": "b11"
+    },
+    "b11": {
+      "type": "Barrier",
+      "id": "BarrierTakeoffOK",
+      "nextTimeout": "b17",
+      "next": "b12"
+    },
+
+
+    "b12": {
+      "type": "CallServiceROS1",
+      "name": "/aq_$mavid/fly_to",
+      "data": "0 0 3",
+      "next": "b13"
+    },
+
+
+    "b13": {
+      "type": "Barrier",
+      "id": "Barrier3m",
+      "nextTimeout": "b17",
+      "next": "b13.5"
+    },
+
+    "b13.5":{
+      "type": "Wait",
+      "ms": "5000",
+      "next": "b14"
+    },
+
+    "b14": {
+      "type": "CallServiceROS1",
+      "name": "/aq_$mavid/fly_to",
+      "data": "0 0 5",
+      "next": "b15"
+    },
+
+    "b15": {
+      "type": "Barrier",
+      "id": "Barrier5m",
+      "nextTimeout": "b17",
+      "next": "b16"
+    },
+
+    "b16":{
+      "type": "Wait",
+      "ms": "5000",
+      "next": "b16.1"
+    },
+
+    "b16.1": {
+      "type": "CallServiceROS1",
+      "name": "/aq_$mavid/fly_to",
+      "data": "0 0 10",
+      "next": "b16.2"
+    },
+
+    "b16.2": {
+      "type": "Barrier",
+      "id": "Barrier10m",
+      "nextTimeout": "b17",
+      "next": "b16.3"
+    },
+
+    "b16.3":{
+      "type": "Wait",
+      "ms": "10000",
+      "next": "b17"
+    },
+
+    "b17": {
+      "type": "CallServiceROS1",
+      "name": "/aq_$mavid/fly_to",
+      "data": "0 0 1",
+      "next": "b18"
+    },
+
+    "b18": {
+      "type": "CallServiceROS1",
+      "name": "/aq_$mavid/land",
+      "next": "b19"
+    },
+
+    "b19": {
+      "type": "CallServiceROS1",
+      "name": "/aq_$mavid/mavros/cmd/arming",
+      "data": "false",
+      "next": "b25"
+    },
+
+    "b25": {
+      "type": "End"
+    }
+  }
+}

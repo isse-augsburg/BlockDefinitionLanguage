@@ -1,0 +1,30 @@
+{
+  "mission": {
+    "b0": {
+      "type": "Start",
+      "next": "b2"
+    },
+    "b2": {
+      "type": "DecisionRandom",
+      "chanceForTrue": ".3",
+      "nextIfTrue": "b5",
+      "nextIfFalse": "b3"
+    },
+
+    "b3":{
+      "type": "Wait",
+      "ms": "1000",
+      "next": "b6"
+    },
+    "b5":{
+      "type": "Wait",
+      "ms": "10000",
+      "next": "b6"
+    },
+    "b6": {
+      "type": "End"
+    }
+  }
+
+
+}

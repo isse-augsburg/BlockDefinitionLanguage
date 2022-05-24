@@ -1,0 +1,86 @@
+{
+  "mission": {
+    "b0": {
+      "type": "Start",
+      "next": "b1"
+    },
+    "b1": {
+      "type": "SyncInit",
+      "next": "b2"
+    },
+
+
+    "b2": {
+      "type": "StartNodeROS2",
+      "package":"swarm_sync",
+      "node": "swarm_sync_client",
+      "nodename": "swcl1",
+      "next": "b3"
+    },
+
+    "b3":{
+      "type": "UserBreakpoint",
+      "next": "b4"
+    },
+
+    "b4":{
+      "type": "CallServiceROS2",
+      "address": "/sync/init_complete",
+      "svctype": "std_srvs/Empty",
+      "next": "b4.5"
+    },
+
+    "b4.5":{
+      "type": "StartLogging",
+      "next": "b5"
+    },
+
+    "b5":{
+      "type": "Barrier",
+      "id": "BarrierInitOK",
+      "next": "b6"
+    },
+
+    "b6":{
+      "type": "Barrier",
+      "id": "BarrierTakeoffOK",
+      "next": "b7"
+    },
+
+    "b7":{
+      "type": "Barrier",
+      "id": "Barrier3m",
+      "next": "b8"
+    },
+
+    "b8":{
+      "type": "Barrier",
+      "id": "Barrier5m",
+      "next": "b9"
+    },
+
+    "b9":{
+      "type": "Barrier",
+      "id": "Barrier10m",
+      "next": "b10"
+    },
+
+    "b10":{
+      "type": "Wait",
+      "ms": "10000",
+      "next": "b11"
+    },
+
+    "b11":{
+      "type": "StopLogging",
+      "next": "b12"
+    },
+
+    "b12":{
+      "type": "End"
+    }
+
+  }
+
+
+}

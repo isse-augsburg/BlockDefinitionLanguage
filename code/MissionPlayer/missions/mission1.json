@@ -1,0 +1,117 @@
+{
+  "mission": {
+    "b0": {
+      "type": "Start",
+      "next": "b1"
+    },
+    "b1": {
+      "type": "Fork",
+      "next": ["b2","b3","b4"]
+    },
+    "b2": {
+      "type": "WaitForActiveTopic",
+      "topic": "/sensors/temperature/*",
+      "next": "b5"
+    },
+
+    "b3":{
+      "type": "StartNode",
+      "package": "roscopter",
+      "node": "copternode",
+      "nodename": "coppternode1",
+      "commandline_args": "__params:=params.yaml __log_disable_rosout:=true",
+      "next": "b6"
+    },
+    "b4":{
+      "type": "StartNode",
+      "package": "roscopter",
+      "node": "swarm_communication",
+      "nodename": "",
+      "next": "b6"
+    },
+    "b5":{
+      "type": "StartNode",
+      "package": "logger",
+      "node": "loggernode",
+      "nodename": "loggernode1",
+      "next": "b6"
+    },
+    "b6": {
+      "type": "Join",
+      "next": "b7"
+    },
+    "b7": {
+      "type": "Barrier",
+      "id": "SwarmBarrier1",
+      "next": "b8"
+    },
+    "b8": {
+      "type": "CallService",
+      "servicename": "/copternode1/arm",
+      "args": "",
+      "next": "b9"
+    },
+    "b9": {
+      "type": "CallAction",
+      "actionname": "/copternode1/takeoff",
+      "args": "0,0,1,0",
+      "next": "b10"
+    },
+    "b10": {
+       "type": "Barrier",
+      "id": "SwarmBarrier2",
+      "next": "b11"
+    },
+    "b11": {
+      "type": "CallService",
+      "servicename": "/loggernode1/startLogging",
+      "args": "",
+      "next": "b12"
+    },
+    "b12": {
+      "type": "CallAction",
+      "actionname": "/copternode1/flyTo",
+      "args": "0,0,100,0",
+      "next": "b13"
+    },
+    "b13": {
+      "type": "Barrier",
+      "id": "SwarmBarrier3",
+      "next": "b14"
+    },
+    "b14": {
+      "type": "Wait",
+      "ms": "500",
+      "next": "b15"
+    },
+    "b15": {
+      "type": "CallAction",
+      "actionname": "/copternode1/flyTo",
+      "args": "0,0,1,0",
+      "next": "b16"
+    },
+    "b16": {
+      "type": "CallService",
+      "servicename": "/loggernode1/stopLogging",
+      "args": "",
+      "next": "b17"
+    },
+    "b17": {
+      "type": "CallAction",
+      "actionname": "/copternode1/land",
+      "args": "0,0,1,0",
+      "next": "b18"
+    },
+    "b18": {
+      "type": "CallService",
+      "servicename": "/copternode1/disarm",
+      "args": "",
+      "next": "b19"
+    },
+    "b19": {
+      "type": "End"
+    }
+  }
+
+
+}

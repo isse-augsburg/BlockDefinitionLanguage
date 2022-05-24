@@ -1,0 +1,103 @@
+{
+  "mission": {
+    "b0": {
+      "type": "Start",
+      "next": "b1"
+    },
+    "b1": {
+      "type": "StartNode",
+      "package": "swarm_sync",
+      "node": "swarm_sync_client",
+      "nodename": "swarm_sync_$mavid",
+      "next": "b11"
+    },
+    "b11":{
+      "type": "SyncInit",
+      "next": "b2"
+    },
+    "b2":{
+      "type": "UserBreakpoint",
+      "next": "b3"
+    },
+
+    "b3": {
+      "type": "Wait",
+      "ms": "1000",
+      "next": "b4"
+    },
+
+    "b4":{
+      "type": "DecisionRandom",
+      "chanceForTrue": ".4",
+      "nextIfTrue": "b5",
+      "nextIfFalse": "b3"
+    },
+    "b5": {
+      "type": "Barrier",
+      "id": "SwarmBarrier1",
+      "next": "b6"
+    },
+
+
+    "b6": {
+      "type": "Wait",
+      "ms": "1000",
+      "next": "b7"
+    },
+
+    "b7":{
+      "type": "DecisionRandom",
+      "chanceForTrue": ".4",
+      "nextIfTrue": "b8",
+      "nextIfFalse": "b6"
+    },
+    "b8": {
+      "type": "Barrier",
+      "id": "SwarmBarrier2",
+      "next": "b9"
+    },
+
+
+    "b9": {
+      "type": "Wait",
+      "ms": "1000",
+      "next": "b10"
+    },
+
+    "b10":{
+      "type": "DecisionRandom",
+      "chanceForTrue": ".4",
+      "nextIfTrue": "b11",
+      "nextIfFalse": "b9"
+    },
+    "b11": {
+      "type": "Barrier",
+      "id": "SwarmBarrier3",
+      "next": "b12"
+    },
+
+
+    "b12": {
+      "type": "Wait",
+      "ms": "1000",
+      "next": "b13"
+    },
+
+    "b13":{
+      "type": "DecisionRandom",
+      "chanceForTrue": ".4",
+      "nextIfTrue": "b14",
+      "nextIfFalse": "b12"
+    },
+    "b14": {
+      "type": "Barrier",
+      "id": "SwarmBarrier4",
+      "next": "b19"
+    },
+    "b19": {
+      "type": "End"
+    }
+  }
+
+
+}

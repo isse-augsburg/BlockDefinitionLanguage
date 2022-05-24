@@ -1,0 +1,43 @@
+{
+  "mission": {
+    "b0": {
+      "type": "Start",
+      "next": "b1"
+    },
+    "b1": {
+      "type": "Fork",
+      "next": ["b2","b3","b4"]
+    },
+    "b2": {
+      "type": "Wait",
+      "ms": "5000",
+      "next": "b5"
+    },
+
+    "b3":{
+      "type": "Wait",
+      "ms": "100",
+      "next": "b6"
+    },
+    "b4":{
+      "type": "Wait",
+      "ms": "100",
+      "next": "b6"
+    },
+    "b5":{
+      "type": "Wait",
+      "ms": "500",
+      "next": "b6"
+    },
+    "b6": {
+      "type": "Join",
+      "next": "b19"
+    },
+
+    "b19": {
+      "type": "End"
+    }
+  }
+
+
+}
